@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const bcrypt = require('bcrypt');
 
 const userSchema = new mongoose.Schema({
     firstName: {
@@ -15,7 +16,8 @@ const userSchema = new mongoose.Schema({
     },
     email: {
         type: String,
-        required: true
+        required: true,
+        unique: true
     },
     encryptedPassword: {
         type: String,
@@ -41,5 +43,23 @@ const userSchema = new mongoose.Schema({
         type: String
     }
 }, { timestamps: true });
+
+userSchema.virtual('password').set(function (password) {
+    this._password = password;
+    this.encryptedPassword = this.securePassword(password);
+}).get(function () {
+    return this._password;
+})
+
+userSchema.methods = {
+    authenticate: function (plainPassword) {
+        return bcrypt.compareSync(plainPassword, this.encryptedPassword);
+    },
+    securePassword: function (plainPassword) {
+        const saltRounds = 10;
+        const hash = bcrypt.hashSync(plainPassword, saltRounds);
+        return hash;
+    }
+}
 
 module.exports = mongoose.model('User', userSchema);
