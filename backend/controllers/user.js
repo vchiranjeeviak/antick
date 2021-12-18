@@ -18,9 +18,9 @@ exports.getUser = (req, res) => {
 }
 
 
-exports.modifyUser = (req,res) => {
-    User.findByIdAndUpdate(req.profile._id,req.body).exec((err , user) =>{
-        if(err){
+exports.modifyUser = (req, res) => {
+    User.findByIdAndUpdate(req.profile._id, req.body, { new: true }).exec((err, user) => {
+        if (err) {
             return res.status(400).json({
                 error: "not updated"
             })

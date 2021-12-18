@@ -2,6 +2,7 @@ const { validationResult } = require("express-validator");
 const User = require("../models/user");
 const jwt = require('jsonwebtoken');
 const ejwt = require('express-jwt');
+const mongoose = require('mongoose');
 
 // methods
 
@@ -70,7 +71,7 @@ exports.isSignedIn = ejwt({
 })
 
 exports.isAuthenticated = (req, res, next) => {
-    let check = req.profile && req.auth && req.profile._id == req.auth._id;
+    let check = req.profile && req.auth && req.profile._id.equals(mongoose.Types.ObjectId(req.auth.id));
     if (!check) {
         return res.status(403).json({
             error: "Access Denied"
