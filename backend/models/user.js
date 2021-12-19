@@ -31,10 +31,10 @@ const userSchema = new mongoose.Schema({
         type: String,
         data: Buffer
     },
-    postedItems: [{
-        type: mongoose.SchemaTypes.ObjectId,
-        ref: 'Product'
-    }],
+    postedItems: {
+        type: Array,
+        default: []
+    },
     phone: {
         type: String,
         required: true
