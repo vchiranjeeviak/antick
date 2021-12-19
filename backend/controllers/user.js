@@ -1,3 +1,4 @@
+
 const User = require('../models/user');
 
 exports.getUserById = (req, res, next, id) => {
@@ -27,5 +28,19 @@ exports.modifyUser = (req, res) => {
         }
         user.encryptedPassword = undefined;
         return res.json(user);
+    })
+}
+
+exports.deleteUser = (req,res) => {
+    User.findByIdAndDelete(req.profile._id).exec((err,user) =>{
+        if(err){
+            return res.status(400).json({
+                error :"user not deleted"
+            })
+        }
+        return res.json({
+            Message:"user successfully deleted",
+            user
+        })
     })
 }
