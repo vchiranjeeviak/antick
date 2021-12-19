@@ -18,10 +18,10 @@ const productschema = new mongoose.Schema({
     trexperienceLink: {
         type: String
     },
-    photos: [{
-        type: String,
+    photos: {
+        ContentType: String,
         data: Buffer
-    }],
+    },
     comments: [{
         type: String,
         commentator: {
